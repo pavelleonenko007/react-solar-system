@@ -27,7 +27,13 @@ export default function Mercury({ planetRadius, radius, angle }) {
 
   return (
     <>
-      <mesh ref={planetRef} name="Mercury" position={pos} onClick={handleClick}>
+      <mesh
+        ref={planetRef}
+        name="Mercury"
+        position={pos}
+        onClick={handleClick}
+        receiveShadow
+      >
         <sphereGeometry args={[planetRadius, 32, 32]} />
         <meshStandardMaterial map={colorMap} />
       </mesh>

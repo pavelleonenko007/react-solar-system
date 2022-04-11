@@ -1,7 +1,8 @@
-import { Stars, Stats } from '@react-three/drei';
+import { Stars } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import React, { Suspense } from 'react';
-import { Vector3 } from 'three';
+import { ReinhardToneMapping } from 'three';
+import { useCurve } from '../hooks/useCurve';
 import Camera from './Camera';
 import Curve from './Curve';
 import Earth from './Earth';
@@ -16,8 +17,13 @@ import Uranus from './Uranus';
 import Venus from './Venus';
 
 export default function Scene() {
+  const { curveProps } = useCurve();
   return (
-    <Canvas camera={{ position: [0, 200, 0], fov: 45 }}>
+    <Canvas
+      shadows
+      camera={{ position: [0, 200, 0], fov: 45 }}
+      gl={{ toneMapping: ReinhardToneMapping, toneMappingExposure: 2.3 }}
+    >
       <Stars
         radius={100}
         depth={50}
@@ -39,11 +45,7 @@ export default function Scene() {
         <Neptune planetRadius={1.7} radius={80} angle={300} />
       </Suspense>
       <Lights />
-      {/* <Curve
-        startPos={new Vector3(10, 200, 0)}
-        endPos={new Vector3(50, 0, 0)}
-        numberOfPoints={40}
-      /> */}
+      <Curve {...curveProps} numberOfPoints={40} />
       {/* <Stats /> */}
       {/* <OrbitControls /> */}
     </Canvas>

@@ -1,33 +1,47 @@
-import React, { useRef } from 'react';
-import { Vector3 } from 'three';
-import { CatmullRomCurve3 } from 'three';
+import { useFrame } from '@react-three/fiber';
+import React, { useEffect, useRef } from 'react';
+import { CatmullRomCurve3, TubeGeometry, Vector3 } from 'three';
+import { useActivePlanet } from '../hooks/useActivePlanet';
 
-export default function Curve({ startPos, endPos, numberOfPoints }) {
-  console.log(startPos, endPos);
-  const ref = useRef();
+function easeInOutQuad(t, b, c, d) {
+  if ((t /= d / 2) < 1) return (c / 2) * t * t + b;
+  return (-c / 2) * (--t * (t - 2) - 1) + b;
+}
 
-  let points = [];
-  for (let index = 0; index < numberOfPoints; index++) {
-    let v1 = new Vector3(startPos.x, startPos.y, startPos.z);
-    let v2 = new Vector3(endPos.x, endPos.y, endPos.z);
-    let p = new Vector3().lerpVectors(v1, v2, 1 / numberOfPoints);
-    console.log(p);
-    p.normalize();
-    p.multiplyScalar(1 + 0.1 * Math.sin((Math.PI * 1) / numberOfPoints));
+export default function Curve({ startPos, endPos, numberOfPoints, ...props }) {
+  const x = useRef(0);
+  const y = useRef(0);
+  const { activePlanet } = useActivePlanet();
+  const points = [];
+
+  for (let index = 0; index <= numberOfPoints; index++) {
+    let p = new Vector3().lerpVectors(startPos, endPos, index / numberOfPoints);
+    p.setComponent(1, p.y + 15 * Math.sin((Math.PI * index) / numberOfPoints));
     points.push(p);
   }
 
-  console.log(ref);
+  const curve = new CatmullRomCurve3(points);
+  const geometry = new TubeGeometry(curve, points.length, 0, 18, false);
 
-  let path = new CatmullRomCurve3(points);
-  console.log(path);
+  useEffect(() => {
+    x.current = 0;
+  }, [activePlanet]);
+
+  useFrame((state, delta) => {
+    x.current += 0.002;
+    y.current = Math.sin(Math.PI * x.current - Math.PI / 2) / 2 + 0.5;
+    // console.log(y.current);
+    if (x.current < 1) {
+      const pos = geometry.parameters.path.getPointAt(y.current);
+      state.camera.position.copy(pos);
+    } else {
+      x.current = 1;
+    }
+  });
+
   return (
-    <tubeGeometry
-      ref={ref}
-      args={[path, 70, 0.02, 50, false]}
-      attach="geometry"
-    >
-      <meshBasicMaterial attach="material" color="#ffffff" />
-    </tubeGeometry>
+    <mesh geometry={geometry} {...props}>
+      {/* <meshBasicMaterial color={'#ffffff'} /> */}
+    </mesh>
   );
 }

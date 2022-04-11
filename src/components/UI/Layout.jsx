@@ -16,9 +16,7 @@ export default function Layout() {
       setActivePlanet(planet);
     }
   }, [pathname, planets]);
-  useEffect(() => {
-    console.log(planets);
-  }, [pathname, planets]);
+
   return (
     <>
       <Scene />

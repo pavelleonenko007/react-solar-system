@@ -34,18 +34,18 @@ export default function Earth({ planetRadius, radius, angle }) {
   }, []);
 
   useFrame(() => {
-    // cloudsRef.current.rotation.y += 0.001;
+    cloudsRef.current.rotation.y += 0.0001;
     // planetRef.current.rotation.y += 0.002;
   });
 
   return (
-    <group>
+    <group name="Earth">
       <mesh position={pos} ref={cloudsRef} onClick={handleClick}>
-        <sphereGeometry args={[planetRadius + 0.015, 32, 32]} />
+        <sphereGeometry args={[planetRadius + 0.015, 64, 64]} />
         <meshStandardMaterial map={cloudsMap} transparent />
       </mesh>
       <mesh position={pos} name="Earth" ref={planetRef}>
-        <sphereGeometry args={[planetRadius, 32, 32]} />
+        <sphereGeometry args={[planetRadius, 64, 64]} />
         <meshStandardMaterial
           map={colorMap}
           normalMap={normalMap}
