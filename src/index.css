@@ -118,17 +118,12 @@ code {
 
 .planets-nav_item--active::before {
   content: '';
-  width: 60px;
-  height: 60px;
-  border: 2px solid white;
-  border-radius: 50%;
+  width: 58.23px;
+  height: 61.5px;
   position: absolute;
   top: 50%;
   left: 50%;
+  background-image: url(../public/Intersect.svg);
   transform: translate(-50%, -50%);
   z-index: -1;
-}
-
-.planets-nav_text {
-  background-color: black;
 }

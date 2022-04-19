@@ -1,7 +1,7 @@
-import { Stars } from '@react-three/drei';
+import { Stars, Stats } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import React, { Suspense } from 'react';
-import { ReinhardToneMapping } from 'three';
+import { sRGBEncoding } from 'three';
 import { useCurve } from '../hooks/useCurve';
 import Camera from './Camera';
 import Curve from './Curve';
@@ -22,7 +22,11 @@ export default function Scene() {
     <Canvas
       shadows
       camera={{ position: [0, 200, 0], fov: 45 }}
-      gl={{ toneMapping: ReinhardToneMapping, toneMappingExposure: 2.3 }}
+      gl={{
+        antialias: true,
+        outputEncoding: sRGBEncoding,
+        pixelRatio: devicePixelRatio,
+      }}
     >
       <Stars
         radius={100}
@@ -46,7 +50,7 @@ export default function Scene() {
       </Suspense>
       <Lights />
       <Curve {...curveProps} numberOfPoints={40} />
-      {/* <Stats /> */}
+      <Stats />
       {/* <OrbitControls /> */}
     </Canvas>
   );

@@ -18,6 +18,7 @@ export default function Ecliptic({ xRadius, zRadius }) {
 
   return (
     <line geometry={lineGeometry}>
+      {/* <bufferGeometry setFromPoints={points} /> */}
       <lineBasicMaterial attach="material" color="#222222" linewidth={10} />
     </line>
   );

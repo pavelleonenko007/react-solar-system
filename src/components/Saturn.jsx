@@ -19,14 +19,12 @@ export default function Saturn({ planetRadius, radius, angle }) {
     radius * Math.cos(angle * (Math.PI / 180)),
   ];
 
-  console.log(ringGeoRef.current);
-
   useEffect(() => {
     var posr = ringGeoRef.current.attributes.position;
     var v3 = new Vector3();
     for (let i = 0; i < posr.count; i++) {
       v3.fromBufferAttribute(posr, i);
-      ringGeoRef.current.attributes.uv.setXY(i, v3.length() < 5 ? 0 : 1, 1);
+      ringGeoRef.current.attributes.uv.setXY(i, v3.length() < 10 ? 0 : 1, 1);
     }
 
     ringRef.current.rotation.x = 5;
@@ -35,16 +33,16 @@ export default function Saturn({ planetRadius, radius, angle }) {
 
   return (
     <group>
-      <mesh ref={ref} name="Saturn" position={pos}>
+      <mesh ref={ref} name="Saturn" position={pos} receiveShadow castShadow>
         <sphereGeometry args={[planetRadius, 32, 32]} />
-        <meshStandardMaterial map={colorMap} />
+        <meshPhysicalMaterial map={colorMap} />
       </mesh>
-      <mesh ref={ringRef} position={pos}>
+      <mesh ref={ringRef} position={pos} castShadow receiveShadow>
         <ringGeometry
           ref={ringGeoRef}
           args={[planetRadius + 1, planetRadius + 3, 64]}
         />
-        <meshStandardMaterial map={ringsMap} transparent side={2} />
+        <meshStandardMaterial map={ringsMap} side={2} />
       </mesh>
       <Ecliptic xRadius={radius} zRadius={radius} />
     </group>

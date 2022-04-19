@@ -3,10 +3,11 @@ import React, { useEffect, useRef } from 'react';
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { usePlanets } from '../hooks/usePlanets';
 import JupiterTexture from '../textures/Jupiter.jpg';
+import JupiterTexture8K from '../textures/8k_jupiter.jpg';
 import Ecliptic from './Ecliptic';
 
 export default function Jupiter({ planetRadius, radius, angle }) {
-  const colorMap = useLoader(TextureLoader, JupiterTexture);
+  const colorMap = useLoader(TextureLoader, JupiterTexture8K);
   const ref = useRef();
   const { setPlanets } = usePlanets();
   const pos = [

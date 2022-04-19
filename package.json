@@ -16,6 +16,7 @@
     "react-scripts": "5.0.0",
     "react-spring": "^9.4.4",
     "three": "^0.138.3",
+    "three-custom-shader-material": "^3.3.1",
     "web-vitals": "^2.1.4",
     "zustand": "^3.7.1"
   },

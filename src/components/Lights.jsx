@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 export default function Lights() {
+  const ref = useRef();
+  console.log(ref.current);
   return (
     <>
-      <ambientLight intensity={0.005} />
+      <ambientLight intensity={0.02} />
       <pointLight
-        color={'#F4E99B'}
+        ref={ref}
+        color={'#ffffff'}
         intensity={1}
         position={[0, 0, 0]}
         castShadow
-        shadow-mapSize-height={2048}
-        shadow-mapSize-width={2048}
+        decay={2}
+        shadow-bias={-0.002}
+        shadow-mapSize-height={512}
+        shadow-mapSize-width={512}
+        // shadow={{ radius: 2 }}
       />
     </>
   );

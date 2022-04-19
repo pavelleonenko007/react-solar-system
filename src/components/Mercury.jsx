@@ -4,10 +4,11 @@ import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useActivePlanet } from '../hooks/useActivePlanet';
 import { usePlanets } from '../hooks/usePlanets';
 import MercuryMap from '../textures/Mercury.jpg';
+import MercuryMap8K from '../textures/8k_mercury.jpg';
 import Ecliptic from './Ecliptic';
 
 export default function Mercury({ planetRadius, radius, angle }) {
-  const colorMap = useLoader(TextureLoader, MercuryMap);
+  const colorMap = useLoader(TextureLoader, MercuryMap8K);
   const planetRef = useRef();
   const { setPlanets } = usePlanets();
   const { setActivePlanet } = useActivePlanet();

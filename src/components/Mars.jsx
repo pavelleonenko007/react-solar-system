@@ -3,10 +3,11 @@ import React, { useEffect, useRef } from 'react';
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { usePlanets } from '../hooks/usePlanets';
 import MarsTexture from '../textures/Mars.jpg';
+import MarsTexture8k from '../textures/8k_mars.jpg';
 import Ecliptic from './Ecliptic';
 
 export default function Mars({ planetRadius, radius, angle }) {
-  const colorMap = useLoader(TextureLoader, MarsTexture);
+  const colorMap = useLoader(TextureLoader, MarsTexture8k);
   const ref = useRef();
   const { setPlanets } = usePlanets();
   const pos = [

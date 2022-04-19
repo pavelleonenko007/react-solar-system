@@ -16,7 +16,6 @@ export default function Camera({ pos = new Vector3() }) {
 
   useEffect(() => {
     timer.current = 0;
-    console.log(activePlanet);
     if (activePlanet) {
       const curve = {
         startPos: camera.position,
