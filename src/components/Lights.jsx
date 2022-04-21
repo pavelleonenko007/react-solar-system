@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 
 export default function Lights() {
   const ref = useRef();
-  console.log(ref.current);
   return (
     <>
       <ambientLight intensity={0.02} />

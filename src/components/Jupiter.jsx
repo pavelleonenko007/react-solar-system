@@ -7,7 +7,7 @@ import JupiterTexture8K from '../textures/8k_jupiter.jpg';
 import Ecliptic from './Ecliptic';
 
 export default function Jupiter({ planetRadius, radius, angle }) {
-  const colorMap = useLoader(TextureLoader, JupiterTexture8K);
+  const colorMap = useLoader(TextureLoader, JupiterTexture);
   const ref = useRef();
   const { setPlanets } = usePlanets();
   const pos = [

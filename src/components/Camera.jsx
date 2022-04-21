@@ -8,6 +8,7 @@ import { useCurve } from '../hooks/useCurve';
 export default function Camera({ pos = new Vector3() }) {
   const { camera } = useThree();
   const { activePlanet } = useActivePlanet();
+  const useMin = useRef(0);
   const refControls = useRef();
   const refTarget = useRef(new Vector3(0, 0, 0));
   const [orbitTarget, setOrbitTarget] = useState([0, 0, 0]);
@@ -17,6 +18,7 @@ export default function Camera({ pos = new Vector3() }) {
   useEffect(() => {
     timer.current = 0;
     if (activePlanet) {
+      console.log(activePlanet);
       const curve = {
         startPos: camera.position,
         endPos: new Vector3(
@@ -26,6 +28,7 @@ export default function Camera({ pos = new Vector3() }) {
             activePlanet.geometry.parameters.radius * 2.5
         ),
       };
+      useMin.current = activePlanet.geometry.parameters.radius + 1;
       setCurveProps(curve);
       setOrbitTarget([
         activePlanet.position.x,
@@ -33,6 +36,7 @@ export default function Camera({ pos = new Vector3() }) {
         activePlanet.position.z,
       ]);
     } else {
+      useMin.current = 0;
       setOrbitTarget([0, 0, 0]);
     }
   }, [activePlanet]);
@@ -58,5 +62,11 @@ export default function Camera({ pos = new Vector3() }) {
     }
   });
 
-  return <OrbitControls ref={refControls} camera={camera} />;
+  return (
+    <OrbitControls
+      ref={refControls}
+      camera={camera}
+      minDistance={useMin.current}
+    />
+  );
 }

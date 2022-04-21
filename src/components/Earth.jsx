@@ -12,6 +12,8 @@ import EarthNigthTexture from '../textures/Earth_Night.jpg';
 import EarthNigthTexture8K from '../textures/8k_earth_nightmap.jpg';
 import EarthNormalTexture from '../textures/Earth_Normal.jpeg';
 import Ecliptic from './Ecliptic';
+import { AdditiveBlending } from 'three';
+import { BackSide } from 'three';
 
 export default function Earth({ planetRadius, radius, angle }) {
   const [colorMap, nightMap, normalMap, bumpMap, cloudsMap] = useLoader(
@@ -50,7 +52,7 @@ export default function Earth({ planetRadius, radius, angle }) {
   const uniforms = useMemo(() => {
     return {
       uSun: {
-        value: new Vector3(0.1, 0, 0.1),
+        value: new Vector3(0.01, 0, 0.01),
       },
       uDay: {
         value: colorMap,
@@ -63,9 +65,65 @@ export default function Earth({ planetRadius, radius, angle }) {
 
   return (
     <group name="Earth">
+      <mesh position={pos}>
+        <sphereGeometry args={[planetRadius + 0.03, 64, 64]} />
+        <shaderMaterial
+          args={[
+            {
+              vertexShader: `
+            varying vec2 vUV;
+            varying vec3 vNormal;
+            varying vec3 vPosition;
+            varying vec3 vPos;
+
+            void main() {
+              vUV = uv;
+              vPosition = position;
+              vPos = (modelMatrix * vec4(position, 1.0)).xyz;
+              vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+              vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+              vNormal = normal;
+              gl_Position = projectionMatrix * mvPosition;
+            }
+            
+          `,
+              fragmentShader: `
+              varying vec2 vUV;
+              varying vec3 vNormal;
+              varying vec3 vPosition;
+              varying vec3 vPos;
+
+            void main() {
+              float ambient = 0.02;
+              float intensity = pow(0.5 - dot(vNormal, vec3(0., 0., 1.)), 2.);
+
+              vec4 lightColor = vec4(1.);
+              vec3 atmosphereColor = vec3(0., 0.8, 1.);
+
+              vec3 normal = normalize(vNormal);
+              vec3 lightDirection = normalize(vec3(0., 0., 0.) - vPos);
+
+              float diffuse = max(dot(lightDirection, normal), 0.);
+
+              float specularLight = 0.5;
+              vec3 viewDirection = normalize(cameraPosition - vPos);
+              vec3 reflectionDirection = reflect(-vec3(0., 0., 0.), normal);
+              float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.), 30.);
+              float specular = specAmount * specularLight;
+
+              gl_FragColor = vec4(atmosphereColor, 1.0) * intensity * lightColor * (diffuse + ambient + specular);
+            }
+          `,
+              blending: AdditiveBlending,
+              side: BackSide,
+              transparent: true,
+            },
+          ]}
+        />
+      </mesh>
       <mesh position={pos} ref={cloudsRef} onClick={handleClick}>
         <sphereGeometry args={[planetRadius + 0.015, 64, 64]} />
-        <meshStandardMaterial map={cloudsMap} transparent />
+        <meshPhongMaterial map={cloudsMap} transparent />
       </mesh>
       <mesh position={pos} name="Earth" ref={planetRef}>
         <sphereGeometry args={[planetRadius, 100, 100]} />
@@ -79,27 +137,44 @@ export default function Earth({ planetRadius, radius, angle }) {
               vertexShader: `
               varying vec2 vUv;
               varying vec3 vNormal;
+              varying vec3 vPos;
+              varying vec3 vPosition;
               
               void main() {
+                vPos = (modelMatrix * vec4(position, 1.0 )).xyz;
+                vPosition = position;
                 vUv = uv;
-                vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
                 vNormal = normal;
+
+                vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
                 gl_Position = projectionMatrix * mvPosition;
               }
               `,
               fragmentShader: `
                 uniform sampler2D uDay;
                 uniform sampler2D uNight;
+                uniform vec3 uSun;
                 varying vec2 vUv;
                 varying vec3 vNormal;
+                varying vec3 vPos;
+                varying vec3 vPosition;
 
                 void main() {
-                  float diff = dot(-normalize(vec3(0.005, 0.0, 0.005)), vNormal);
-                  // diff = diff * 0.5 + 0.5;
-                  vec3 colorDay = texture2D(uDay, vUv).rgb;
-                  vec3 colorNight = texture2D(uNight, vUv).rgb;
-                  vec3 resultColor = vec3(mix(colorNight, colorDay, diff));
-                  gl_FragColor = vec4(resultColor, 1.);
+                  vec4 ambient = vec4(1., 1., 1., 1.);
+                  vec3 dayColor = texture2D(uDay, vUv).rgb;
+                  vec3 nightColor = texture2D(uNight, vUv).rgb;
+
+                  float diff = dot(vNormal, normalize(uSun - vPos));
+
+                  float specularLight = 0.9;
+                  vec3 viewDirection = normalize(cameraPosition - vPos);
+                  vec3 reflectionDirection = reflect(uSun, vNormal);
+                  float specularAmount = pow(max(dot(viewDirection, reflectionDirection), 0.), 8.);
+                  float specular = specularAmount * specularLight;
+
+                  vec3 result = mix(nightColor, dayColor, diff);
+
+                  gl_FragColor = vec4(result, 1.);
                 }
               `,
             },

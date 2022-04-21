@@ -2,32 +2,16 @@
 
 uniform sampler2D uDay;
 uniform sampler2D uNight;
-
-uniform vec3 uSun;
-
 varying vec2 vUv;
 varying vec3 vNormal;
 
-void main( void ) {
-  vec3 dayColor = texture2D( uDay, vUv ).rgb;
-  vec3 nightColor = texture2D( uNight, vUv ).rgb;
-
-  // compute cosine sun to normal so -1 is away from sun and +1 is toward sun.
-  float cosineAngleSunToNormal = dot(normalize(uSun), normalize(vNormal));
-
-  // sharpen the edge beween the transition
-  cosineAngleSunToNormal = clamp( cosineAngleSunToNormal * 100., -1.0, 1.0);
-
-  // convert to 0 to 1 for mixing
-  float mixAmount = cosineAngleSunToNormal * 0.5 + 0.5;
-
-  vec3 black = vec3(0., 0., 0.);
-  nightColor = mix(nightColor, black, smoothstep(0. , 0.3, normalize(vNormal).z + normalize(vNormal).x));
-
-  // Select day or night texture based on mix.
-  vec3 color = mix( dayColor, nightColor, mixAmount );
-
-  gl_FragColor = vec4( color, 1.0 );
+void main() {
+  float diff = dot(-normalize(vec3(0.005, 0.0, 0.005)), vNormal);
+  // diff = diff * 0.5 + 0.5;
+  vec3 colorDay = texture2D(uDay, vUv).rgb;
+  vec3 colorNight = texture2D(uNight, vUv).rgb;
+  vec3 resultColor = vec3(mix(colorNight, colorDay, diff));
+  gl_FragColor = vec4(resultColor, 1.);
 }
 
 // vertex
