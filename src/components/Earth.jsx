@@ -34,6 +34,7 @@ export default function Earth({ planetRadius, radius, angle }) {
   const handleClick = (e) => {
     setActivePlanet(planetRef.current);
   };
+
   const pos = [
     radius * Math.sin(angle * (Math.PI / 180)),
     0,
@@ -159,6 +160,14 @@ export default function Earth({ planetRadius, radius, angle }) {
                 varying vec3 vPos;
                 varying vec3 vPosition;
 
+                vec4 toLinear(vec4 sRGB) {
+                  bvec4 cutoff = lessThan(sRGB, vec4(0.04045));
+                  vec4 higher = pow((sRGB + vec4(0.055))/vec4(1.055), vec4(2.4));
+                  vec4 lower = sRGB/vec4(12.92);
+
+                  return mix(higher, lower, cutoff);
+                }
+
                 void main() {
                   vec4 ambient = vec4(1., 1., 1., 1.);
                   vec3 dayColor = texture2D(uDay, vUv).rgb;
@@ -174,7 +183,8 @@ export default function Earth({ planetRadius, radius, angle }) {
 
                   vec3 result = mix(nightColor, dayColor, diff);
 
-                  gl_FragColor = vec4(result, 1.);
+                  gl_FragColor = toLinear(vec4(result, 1.));
+                  // gl_FragColor = vec4(result, 1.);
                 }
               `,
             },

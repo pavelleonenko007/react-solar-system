@@ -16,6 +16,7 @@ export default function PlanetsLayout() {
         <PlanetLink to="Saturn">Saturn</PlanetLink>
         <PlanetLink to="Uranus">Uranus</PlanetLink>
         <PlanetLink to="Neptune">Neptune</PlanetLink>
+        <PlanetLink to="Pluto">Pluto</PlanetLink>
       </div>
     </>
   );

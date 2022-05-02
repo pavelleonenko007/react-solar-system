@@ -19,6 +19,7 @@ export default function App() {
             <Route path="Saturn" element={<PlanetPage />} />
             <Route path="Uranus" element={<PlanetPage />} />
             <Route path="Neptune" element={<PlanetPage />} />
+            <Route path="Pluto" element={<PlanetPage />} />
           </Route>
         </Route>
       </Routes>
