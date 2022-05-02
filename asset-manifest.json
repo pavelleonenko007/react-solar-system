@@ -1,8 +1,9 @@
 {
   "files": {
     "main.css": "/static/css/main.74685b96.css",
-    "main.js": "/static/js/main.fa0b79b1.js",
+    "main.js": "/static/js/main.6d5203d3.js",
     "static/media/Mercury.jpg": "/static/media/Mercury.25770cefbc45e61881ba.jpg",
+    "static/media/Pluto.jpg": "/static/media/Pluto.0ffb11f695be1d12ba25.jpg",
     "static/media/Mars.jpg": "/static/media/Mars.1ff0bd763679d747b535.jpg",
     "static/media/8k_mercury.jpg": "/static/media/8k_mercury.ec9d16757c33a83a4e2f.jpg",
     "static/media/Jupiter.jpg": "/static/media/Jupiter.8cd98e19008c175ca624.jpg",
@@ -20,15 +21,15 @@
     "static/media/Earth_Night.jpg": "/static/media/Earth_Night.36f11e5e8af29fc1457e.jpg",
     "static/media/Neptune.jpg": "/static/media/Neptune.6dd112666aad0cd68958.jpg",
     "static/media/Venus.jpg": "/static/media/Venus.b2e12742cd06b7933503.jpg",
-    "static/media/rings.jpeg": "/static/media/rings.a57e2a9431e25f5d566f.jpeg",
     "static/media/Uranus.jpg": "/static/media/Uranus.428ad3f979bd783a27d1.jpg",
+    "static/media/saturn_rings.png": "/static/media/saturn_rings.89839372f2ea539a182f.png",
     "index.html": "/index.html",
     "static/media/Intersect.svg": "/static/media/Intersect.7f4cfd0abc265692c2f3.svg",
     "main.74685b96.css.map": "/static/css/main.74685b96.css.map",
-    "main.fa0b79b1.js.map": "/static/js/main.fa0b79b1.js.map"
+    "main.6d5203d3.js.map": "/static/js/main.6d5203d3.js.map"
   },
   "entrypoints": [
     "static/css/main.74685b96.css",
-    "static/js/main.fa0b79b1.js"
+    "static/js/main.6d5203d3.js"
   ]
 }
