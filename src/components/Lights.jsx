@@ -4,7 +4,7 @@ export default function Lights() {
   const ref = useRef();
   return (
     <>
-      <ambientLight intensity={0.02} />
+      <ambientLight intensity={0.08} />
       <pointLight
         ref={ref}
         color={'#ffffff'}

@@ -5,15 +5,21 @@ import { usePlanets } from '../hooks/usePlanets';
 import MarsTexture from '../textures/Mars.jpg';
 import MarsTexture8k from '../textures/8k_mars.jpg';
 import Ecliptic from './Ecliptic';
+import { useActivePlanet } from '../hooks/useActivePlanet';
 
 export default function Mars({ planetRadius, radius, angle }) {
   const colorMap = useLoader(TextureLoader, MarsTexture);
   const ref = useRef();
   const { setPlanets } = usePlanets();
+  const { setActivePlanet } = useActivePlanet();
+  const handleMarsClick = (event) => {
+    event.stopPropagation();
+    setActivePlanet(ref.current);
+  };
   const pos = [
-    radius * Math.sin(angle * (Math.PI / 180)),
-    0,
     radius * Math.cos(angle * (Math.PI / 180)),
+    0,
+    radius * Math.sin(angle * (Math.PI / 180)),
   ];
 
   useEffect(() => {
@@ -21,9 +27,9 @@ export default function Mars({ planetRadius, radius, angle }) {
   }, []);
   return (
     <>
-      <mesh ref={ref} name="Mars" position={pos}>
-        <sphereGeometry args={[planetRadius, 32, 32]} />
-        <meshStandardMaterial map={colorMap} />
+      <mesh ref={ref} name="Mars" position={pos} onClick={handleMarsClick}>
+        <sphereGeometry args={[planetRadius, 64, 64]} />
+        <meshPhongMaterial map={colorMap} />
       </mesh>
       <Ecliptic xRadius={radius} zRadius={radius} />
     </>

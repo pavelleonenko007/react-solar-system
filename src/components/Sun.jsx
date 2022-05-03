@@ -9,17 +9,23 @@ import {
 } from '@react-three/postprocessing';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
+import { useActivePlanet } from '../hooks/useActivePlanet';
 import { usePlanets } from '../hooks/usePlanets';
 import SunMap from '../textures/Sun.jpg';
 
 export default function Sun() {
   const colorMap = useLoader(TextureLoader, SunMap);
   const { setPlanets } = usePlanets();
-  const ref = useRef();
   const sunRef = useRef();
   const composer = useRef();
+  const ref = useRef();
+  const { setActivePlanet } = useActivePlanet();
+  const handleSunClick = (event) => {
+    event.stopPropagation();
+    setActivePlanet(sunRef.current);
+  };
   useEffect(() => {
-    setPlanets(sunRef.current);
+    setPlanets(ref.current);
   }, []);
 
   const uniforms = useMemo(
@@ -38,7 +44,11 @@ export default function Sun() {
 
   return (
     <group>
-      <mesh ref={sunRef} name="Sun">
+      <mesh ref={ref} name="Sun" onClick={handleSunClick}>
+        <sphereGeometry args={[3, 32, 32]} />
+        <meshBasicMaterial color={'yellow'} />
+      </mesh>
+      <mesh ref={sunRef}>
         <sphereGeometry args={[6, 32, 32]} />
         <meshBasicMaterial map={colorMap} />
         {/* <shaderMaterial

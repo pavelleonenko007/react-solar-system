@@ -1,14 +1,12 @@
 import { useLoader } from '@react-three/fiber';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { BackSide, Vector3 } from 'three';
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
+import { useActivePlanet } from '../hooks/useActivePlanet';
 import { usePlanets } from '../hooks/usePlanets';
 import SaturnTexture from '../textures/Saturn.jpg';
 import Rings from '../textures/saturn_rings.png';
-// import Rings from '../textures/rings.jpeg';
 import Ecliptic from './Ecliptic';
-import { Vector3 } from 'three';
-import { DoubleSide } from 'three';
-import { BackSide } from 'three';
 
 export default function Saturn({ planetRadius, radius, angle }) {
   const [colorMap, ringsMap] = useLoader(TextureLoader, [SaturnTexture, Rings]);
@@ -16,14 +14,18 @@ export default function Saturn({ planetRadius, radius, angle }) {
   const ringRef = useRef();
   const ringGeoRef = useRef();
   const { setPlanets } = usePlanets();
+  const { setActivePlanet } = useActivePlanet();
+  const handleSaturnClick = (event) => {
+    event.stopPropagation();
+    setActivePlanet(ref.current);
+  };
   const pos = [
-    radius * Math.sin(angle * (Math.PI / 180)),
-    0,
     radius * Math.cos(angle * (Math.PI / 180)),
+    0,
+    radius * Math.sin(angle * (Math.PI / 180)),
   ];
 
   useEffect(() => {
-    // var posr = ringGeoRef.current.attributes.position;
     const geometry = ringGeoRef.current;
     const pos = geometry.attributes.position;
     var v3 = new Vector3();
@@ -32,30 +34,27 @@ export default function Saturn({ planetRadius, radius, angle }) {
       geometry.attributes.uv.setXY(i, v3.length() < 5 ? 0 : 1, 1);
     }
 
-    ringRef.current.rotation.x = 5;
-    console.log(ref.current.position);
+    ringRef.current.rotation.x = 4.7;
+    ringRef.current.rotation.y = 0.2;
     setPlanets(ref.current);
   }, []);
 
-  const uniforms = useMemo(
-    () => ({
-      ringTexture: {
-        value: ringsMap,
-      },
-    }),
-    []
-  );
-
   return (
     <group>
-      <mesh ref={ref} name="Saturn" position={pos} castShadow>
+      <mesh
+        ref={ref}
+        name="Saturn"
+        position={pos}
+        castShadow
+        onClick={handleSaturnClick}
+      >
         <sphereGeometry args={[planetRadius, 64, 64]} />
         <meshPhysicalMaterial map={colorMap} />
       </mesh>
       <mesh ref={ringRef} position={pos} receiveShadow>
         <ringGeometry
           ref={ringGeoRef}
-          args={[planetRadius + 1, planetRadius + 3, 64]}
+          args={[planetRadius + 1, planetRadius + 4, 64]}
         />
         {/* <meshBasicMaterial color={'#ababab'} /> */}
         {/* <shaderMaterial

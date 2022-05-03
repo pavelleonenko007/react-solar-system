@@ -18,15 +18,63 @@ export default function Camera({ pos = new Vector3() }) {
   useEffect(() => {
     timer.current = 0;
     if (activePlanet) {
-      const curve = {
-        startPos: camera.position,
-        endPos: new Vector3(
+      const hypotenuse = Math.sqrt(
+        Math.pow(activePlanet.position.x, 2) +
+          Math.pow(activePlanet.position.z, 2)
+      );
+
+      let angle;
+      let endPos;
+
+      if (hypotenuse === 0) {
+        endPos = new Vector3(
           activePlanet.position.x,
           activePlanet.position.y,
           activePlanet.position.z +
             activePlanet.geometry.parameters.radius * 2.5
-        ),
+        );
+      } else {
+        if (activePlanet.position.x > 0 && activePlanet.position.z > 0) {
+          angle =
+            Math.asin(activePlanet.position.z / hypotenuse) * (180 / Math.PI);
+        }
+
+        if (activePlanet.position.x < 0 && activePlanet.position.z > 0) {
+          angle =
+            180 -
+            Math.asin(Math.abs(activePlanet.position.z) / hypotenuse) *
+              (180 / Math.PI);
+        }
+
+        if (activePlanet.position.x < 0 && activePlanet.position.z < 0) {
+          angle =
+            180 +
+            Math.asin(Math.abs(activePlanet.position.z) / hypotenuse) *
+              (180 / Math.PI);
+        }
+
+        if (activePlanet.position.x > 0 && activePlanet.position.z < 0) {
+          angle =
+            360 -
+            Math.asin(Math.abs(activePlanet.position.z) / hypotenuse) *
+              (180 / Math.PI);
+        }
+
+        const newRadius =
+          hypotenuse - activePlanet.geometry.parameters.radius * 3;
+
+        endPos = new Vector3(
+          newRadius * Math.cos(angle * (Math.PI / 180)),
+          activePlanet.position.y,
+          newRadius * Math.sin(angle * (Math.PI / 180))
+        );
+      }
+
+      const curve = {
+        startPos: camera.position,
+        endPos: endPos,
       };
+
       useMin.current = activePlanet.geometry.parameters.radius + 1;
       setCurveProps(curve);
       setOrbitTarget([

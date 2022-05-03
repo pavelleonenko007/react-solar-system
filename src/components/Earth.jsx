@@ -1,54 +1,47 @@
-import { useLoader } from '@react-three/fiber';
+import { useFrame, useLoader } from '@react-three/fiber';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Vector3 } from 'three';
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useActivePlanet } from '../hooks/useActivePlanet';
 import { usePlanets } from '../hooks/usePlanets';
-import EarthTexture from '../textures/Earth.jpg';
-import EarthTexture8K from '../textures/8k_earth_daymap.jpg';
-import EarthBumpTexture from '../textures/Earth_Bump.jpeg';
-import EarthCloudsMap from '../textures/Earth_Clouds.png';
+import EarthDayTexture from '../textures/Earth_Day.jpg';
 import EarthNigthTexture from '../textures/Earth_Night.jpg';
-import EarthNigthTexture8K from '../textures/8k_earth_nightmap.jpg';
-import EarthNormalTexture from '../textures/Earth_Normal.jpeg';
+import EarthCloudsTexture from '../textures/Earth_Clouds.png';
 import Ecliptic from './Ecliptic';
+import { useNavigate } from 'react-router-dom';
+import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import { AdditiveBlending } from 'three';
 import { BackSide } from 'three';
+import { Color } from 'three';
 
 export default function Earth({ planetRadius, radius, angle }) {
-  const [colorMap, nightMap, normalMap, bumpMap, cloudsMap] = useLoader(
-    TextureLoader,
-    [
-      EarthTexture8K,
-      EarthNigthTexture8K,
-      EarthNormalTexture,
-      EarthBumpTexture,
-      EarthCloudsMap,
-    ]
-  );
+  const [colorMap, nightMap, cloudsMap] = useLoader(TextureLoader, [
+    EarthDayTexture,
+    EarthNigthTexture,
+    EarthCloudsTexture,
+  ]);
   const { setPlanets } = usePlanets();
   const { setActivePlanet } = useActivePlanet();
-  const mat = useRef();
   const cloudsRef = useRef();
   const planetRef = useRef();
   const handleClick = (e) => {
+    e.stopPropagation();
     setActivePlanet(planetRef.current);
   };
 
   const pos = [
-    radius * Math.sin(angle * (Math.PI / 180)),
-    0,
     radius * Math.cos(angle * (Math.PI / 180)),
+    0,
+    radius * Math.sin(angle * (Math.PI / 180)),
   ];
 
   useEffect(() => {
     setPlanets(planetRef.current);
   }, []);
 
-  // useFrame(() => {
-  //   cloudsRef.current.rotation.y += 0.0001;
-  //   // planetRef.current.rotation.y += 0.002;
-  // });
+  useFrame(() => {
+    cloudsRef.current.rotation.y += 0.0002;
+  });
 
   const uniforms = useMemo(() => {
     return {
@@ -64,56 +57,55 @@ export default function Earth({ planetRadius, radius, angle }) {
     };
   }, []);
 
+  const atmUniforms = useMemo(
+    () => ({
+      c: {
+        value: 0.85,
+      },
+      p: {
+        value: 10,
+      },
+      glowColor: {
+        value: new Color('#1e296f'),
+      },
+    }),
+    []
+  );
+
   return (
-    <group name="Earth">
+    <group>
       <mesh position={pos}>
-        <sphereGeometry args={[planetRadius + 0.03, 64, 64]} />
+        <sphereGeometry args={[planetRadius + 0.02, 64, 64]} />
         <shaderMaterial
           args={[
             {
+              uniforms: atmUniforms,
               vertexShader: `
-            varying vec2 vUV;
-            varying vec3 vNormal;
-            varying vec3 vPosition;
-            varying vec3 vPos;
-
-            void main() {
-              vUV = uv;
-              vPosition = position;
-              vPos = (modelMatrix * vec4(position, 1.0)).xyz;
-              vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-              vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-              vNormal = normal;
-              gl_Position = projectionMatrix * mvPosition;
-            }
-            
+              varying vec3 vWordPos;
+        varying vec3 vNormal;
+        void main () {
+          vNormal = normalize(normalMatrix * normal);
+          vWordPos = (modelMatrix * vec4(position, 1.0)).xyz;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        }
           `,
               fragmentShader: `
-              varying vec2 vUV;
-              varying vec3 vNormal;
-              varying vec3 vPosition;
-              varying vec3 vPos;
+              uniform vec3 glowColor;
+        uniform float c;
+        uniform float p;
+        varying vec3 vWordPos;
+        varying vec3 vNormal;
+        void main () {
 
-            void main() {
-              float ambient = 0.02;
-              float intensity = pow(0.5 - dot(vNormal, vec3(0., 0., 1.)), 2.);
+          vec3 lightDirection = normalize(vec3(0., 0., 0.) - vWordPos);
+          float diffuse = dot(lightDirection, vNormal); 
 
-              vec4 lightColor = vec4(1.);
-              vec3 atmosphereColor = vec3(0., 0.8, 1.);
-
-              vec3 normal = normalize(vNormal);
-              vec3 lightDirection = normalize(vec3(0., 0., 0.) - vPos);
-
-              float diffuse = max(dot(lightDirection, normal), 0.);
-
-              float specularLight = 0.5;
-              vec3 viewDirection = normalize(cameraPosition - vPos);
-              vec3 reflectionDirection = reflect(-vec3(0., 0., 0.), normal);
-              float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.), 30.);
-              float specular = specAmount * specularLight;
-
-              gl_FragColor = vec4(atmosphereColor, 1.0) * intensity * lightColor * (diffuse + ambient + specular);
-            }
+          vec3 wCameraToVertex = vWordPos - cameraPosition;
+          vec3 viewCameraTovertex = (viewMatrix * vec4(wCameraToVertex, 0.0)).xyz;
+          viewCameraTovertex = normalize(viewCameraTovertex);
+          float intensity = pow(c + dot(vNormal, viewCameraTovertex), p);
+          gl_FragColor = vec4(glowColor, intensity);
+        }
           `,
               blending: AdditiveBlending,
               side: BackSide,
@@ -122,11 +114,11 @@ export default function Earth({ planetRadius, radius, angle }) {
           ]}
         />
       </mesh>
-      <mesh position={pos} ref={cloudsRef} onClick={handleClick}>
+      <mesh position={pos} ref={cloudsRef}>
         <sphereGeometry args={[planetRadius + 0.015, 64, 64]} />
         <meshPhongMaterial map={cloudsMap} transparent />
       </mesh>
-      <mesh position={pos} name="Earth" ref={planetRef}>
+      <mesh position={pos} name="Earth" ref={planetRef} onClick={handleClick}>
         <sphereGeometry args={[planetRadius, 100, 100]} />
         <shaderMaterial
           args={[
@@ -183,8 +175,8 @@ export default function Earth({ planetRadius, radius, angle }) {
 
                   vec3 result = mix(nightColor, dayColor, diff);
 
-                  gl_FragColor = toLinear(vec4(result, 1.));
-                  // gl_FragColor = vec4(result, 1.);
+                  // gl_FragColor = toLinear(vec4(result, 1.));
+                  gl_FragColor = vec4(result, 1.);
                 }
               `,
             },
@@ -196,14 +188,14 @@ export default function Earth({ planetRadius, radius, angle }) {
           uNight={nightMap}
           extensions={{ derivatives: true }}
         /> */}
-        <meshPhongMaterial
+        {/* <meshPhongMaterial
           reflectivity={2}
           map={nightMap}
           normalMap={normalMap}
           normalScale={[0.2, 0.2]}
           bumpMap={bumpMap}
           bumpScale={0.9}
-        />
+        /> */}
       </mesh>
       <Ecliptic xRadius={radius} zRadius={radius} />
     </group>

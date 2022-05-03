@@ -11,6 +11,7 @@ export default function PlanetsLayout() {
         <PlanetLink to="Mercury">Mercury</PlanetLink>
         <PlanetLink to="Venus">Venus</PlanetLink>
         <PlanetLink to="Earth">Earth</PlanetLink>
+        <PlanetLink to="Moon">Moon</PlanetLink>
         <PlanetLink to="Mars">Mars</PlanetLink>
         <PlanetLink to="Jupiter">Jupiter</PlanetLink>
         <PlanetLink to="Saturn">Saturn</PlanetLink>

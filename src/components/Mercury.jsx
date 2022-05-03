@@ -4,7 +4,6 @@ import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useActivePlanet } from '../hooks/useActivePlanet';
 import { usePlanets } from '../hooks/usePlanets';
 import MercuryMap from '../textures/Mercury.jpg';
-import MercuryMap8K from '../textures/8k_mercury.jpg';
 import Ecliptic from './Ecliptic';
 
 export default function Mercury({ planetRadius, radius, angle }) {
@@ -13,13 +12,14 @@ export default function Mercury({ planetRadius, radius, angle }) {
   const { setPlanets } = usePlanets();
   const { setActivePlanet } = useActivePlanet();
   const handleClick = (e) => {
+    e.stopPropagation();
     setActivePlanet(planetRef.current);
   };
 
   const pos = [
-    radius * Math.sin(angle * (Math.PI / 180)),
-    0,
     radius * Math.cos(angle * (Math.PI / 180)),
+    0,
+    radius * Math.sin(angle * (Math.PI / 180)),
   ];
 
   useEffect(() => {

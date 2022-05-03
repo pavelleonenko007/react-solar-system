@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useActivePlanet } from '../../hooks/useActivePlanet';
 import { usePlanets } from '../../hooks/usePlanets';
 import Scene from '../Scene';
@@ -7,8 +7,10 @@ import HeaderLink from './HeaderLink';
 
 export default function Layout() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { planets } = usePlanets();
-  const { setActivePlanet } = useActivePlanet();
+  const { activePlanet, setActivePlanet } = useActivePlanet();
+
   useEffect(() => {
     if (pathname.includes('planets') && pathname.match(/planets\/(.+)/)) {
       const planetName = pathname.match(/planets\/(.+)/)[1];
@@ -16,6 +18,12 @@ export default function Layout() {
       setActivePlanet(planet);
     }
   }, [pathname, planets]);
+
+  useEffect(() => {
+    if (activePlanet) {
+      navigate('planets/' + activePlanet.name);
+    }
+  }, [activePlanet]);
 
   return (
     <>
