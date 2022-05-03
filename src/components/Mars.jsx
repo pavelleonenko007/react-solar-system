@@ -3,7 +3,6 @@ import React, { useEffect, useRef } from 'react';
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { usePlanets } from '../hooks/usePlanets';
 import MarsTexture from '../textures/Mars.jpg';
-import MarsTexture8k from '../textures/8k_mars.jpg';
 import Ecliptic from './Ecliptic';
 import { useActivePlanet } from '../hooks/useActivePlanet';
 

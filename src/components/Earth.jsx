@@ -1,18 +1,13 @@
 import { useFrame, useLoader } from '@react-three/fiber';
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Vector3 } from 'three';
+import { AdditiveBlending, BackSide, Color, Vector3 } from 'three';
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useActivePlanet } from '../hooks/useActivePlanet';
 import { usePlanets } from '../hooks/usePlanets';
+import EarthCloudsTexture from '../textures/Earth_Clouds.png';
 import EarthDayTexture from '../textures/Earth_Day.jpg';
 import EarthNigthTexture from '../textures/Earth_Night.jpg';
-import EarthCloudsTexture from '../textures/Earth_Clouds.png';
 import Ecliptic from './Ecliptic';
-import { useNavigate } from 'react-router-dom';
-import { Bloom, EffectComposer } from '@react-three/postprocessing';
-import { AdditiveBlending } from 'three';
-import { BackSide } from 'three';
-import { Color } from 'three';
 
 export default function Earth({ planetRadius, radius, angle }) {
   const [colorMap, nightMap, cloudsMap] = useLoader(TextureLoader, [
