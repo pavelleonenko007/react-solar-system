@@ -1,16 +1,15 @@
 {
   "files": {
     "main.css": "/static/css/main.74685b96.css",
-    "main.js": "/static/js/main.272394e1.js",
-    "static/media/Mercury.jpg": "/static/media/Mercury.25770cefbc45e61881ba.jpg",
+    "main.js": "/static/js/main.46d18233.js",
     "static/media/Pluto.jpg": "/static/media/Pluto.0ffb11f695be1d12ba25.jpg",
-    "static/media/Earth_Clouds.png": "/static/media/Earth_Clouds.0309cc8037fc971b2fa0.png",
-    "static/media/Moon.jpg": "/static/media/Moon.f457505b94f4c0d0a450.jpg",
+    "static/media/Earth_Clouds.png": "/static/media/Earth_Clouds.d2e5e38a518777f6c967.png",
     "static/media/Mars.jpg": "/static/media/Mars.1ff0bd763679d747b535.jpg",
+    "static/media/Moon.jpg": "/static/media/Moon.b33b2e0ed7eaea917157.jpg",
+    "static/media/Mercury.jpg": "/static/media/Mercury.ec9d16757c33a83a4e2f.jpg",
     "static/media/Jupiter.jpg": "/static/media/Jupiter.8cd98e19008c175ca624.jpg",
     "static/media/Earth_Night.jpg": "/static/media/Earth_Night.c0e138e9bf380cafd2c2.jpg",
     "static/media/Neptune.jpg": "/static/media/Neptune.03a6b416cf9e4c6f396d.jpg",
-    "static/media/8k_mars.jpg": "/static/media/8k_mars.01b31b371471348da1db.jpg",
     "static/media/Saturn.jpg": "/static/media/Saturn.a99bb6010c608c64ef51.jpg",
     "static/media/Earth_Day.jpg": "/static/media/Earth_Day.28607ad560c28de6e0b4.jpg",
     "static/media/Sun.jpg": "/static/media/Sun.4b569137334e61081651.jpg",
@@ -20,10 +19,10 @@
     "index.html": "/index.html",
     "static/media/Intersect.svg": "/static/media/Intersect.7f4cfd0abc265692c2f3.svg",
     "main.74685b96.css.map": "/static/css/main.74685b96.css.map",
-    "main.272394e1.js.map": "/static/js/main.272394e1.js.map"
+    "main.46d18233.js.map": "/static/js/main.46d18233.js.map"
   },
   "entrypoints": [
     "static/css/main.74685b96.css",
-    "static/js/main.272394e1.js"
+    "static/js/main.46d18233.js"
   ]
 }
