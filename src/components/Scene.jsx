@@ -1,4 +1,4 @@
-import { softShadows, Stars, Stats } from '@react-three/drei';
+import { softShadows, Stars } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import React, { Suspense } from 'react';
 import { useCurve } from '../hooks/useCurve';
@@ -28,16 +28,7 @@ softShadows({
 export default function Scene() {
   const { curveProps } = useCurve();
   return (
-    <Canvas
-      linear
-      shadows
-      camera={{ position: [0, 250, 0], fov: 45 }}
-      gl={
-        {
-          // antialias: true,
-        }
-      }
-    >
+    <Canvas linear shadows camera={{ position: [0, 250, 0], fov: 45 }}>
       <Stars
         radius={100}
         depth={50}
@@ -62,7 +53,7 @@ export default function Scene() {
       </Suspense>
       <Lights />
       <Curve {...curveProps} numberOfPoints={40} />
-      <Stats />
+      {/* <Stats /> */}
     </Canvas>
   );
 }

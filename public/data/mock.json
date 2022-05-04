@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Sun",
+    "name": "Sun",
+    "description": "<p>The Sun is a yellow dwarf star, a hot ball of glowing gases at the heart of our solar system. Its gravity holds everything from the biggest planets to tiny debris in its orbit. It is by far the most important source of energy for life on Earth.</p>",
+    "bullets": [
+      {
+        "title": "Star type",
+        "value": "Yellow Dwarf Star"
+      },
+      {
+        "title": "Age",
+        "value": "4,603 billion y.o."
+      }
+    ]
+  }
+]

@@ -5,7 +5,9 @@ import PlanetLink from './PlanetLink';
 export default function PlanetsLayout() {
   return (
     <>
-      <Outlet />
+      <div className="content">
+        <Outlet />
+      </div>
       <div className="planets-nav">
         <PlanetLink to="Sun">Sun</PlanetLink>
         <PlanetLink to="Mercury">Mercury</PlanetLink>
