@@ -40,8 +40,10 @@ code {
 
 .app-navbar {
   width: 100%;
-  height: auto;
-  padding-top: 17px;
+  height: 65px;
+  margin-top: 23px;
+  display: flex;
+  align-items: center;
   pointer-events: all;
 }
 
@@ -53,6 +55,10 @@ code {
   margin-right: auto;
   margin-left: auto;
   display: flex;
+}
+
+.container--about {
+  max-width: 838px;
 }
 
 .container--planet {
@@ -140,12 +146,13 @@ code {
 }
 
 .planet {
+  pointer-events: all;
   width: 100%;
 }
 
 .planet_wrapper {
   width: 100%;
-  max-width: 700px;
+  max-width: 680px;
 }
 
 .planet_title {
@@ -168,6 +175,8 @@ code {
 .bullets {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  column-gap: 50px;
+  row-gap: 41.66px;
 }
 
 .bullet_value {
@@ -175,10 +184,44 @@ code {
   line-height: 24px;
   margin-bottom: 8px;
   color: #fff;
+  text-transform: uppercase;
 }
 
 .bullet_title {
   font-size: 24px;
   line-height: 24px;
   color: rgba(255, 255, 255, 0.3);
+}
+
+.header {
+  padding-top: 36px;
+  padding-bottom: 36px;
+}
+
+.header_wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.about {
+  width: 100%;
+  margin-top: 61px;
+}
+
+.about_title {
+  font-size: 75px;
+  line-height: 75px;
+}
+
+.about_content {
+  width: 100%;
+  margin-top: 48px;
+  font-size: 44px;
+  line-height: 51px;
+}
+
+.about_content p {
+  margin-bottom: 80px;
 }

@@ -3,11 +3,6 @@ import React, { useEffect, useRef } from 'react';
 import { CatmullRomCurve3, TubeGeometry, Vector3 } from 'three';
 import { useActivePlanet } from '../hooks/useActivePlanet';
 
-function easeInOutQuad(t, b, c, d) {
-  if ((t /= d / 2) < 1) return (c / 2) * t * t + b;
-  return (-c / 2) * (--t * (t - 2) - 1) + b;
-}
-
 export default function Curve({ startPos, endPos, numberOfPoints, ...props }) {
   const x = useRef(0);
   const y = useRef(0);
@@ -30,7 +25,6 @@ export default function Curve({ startPos, endPos, numberOfPoints, ...props }) {
   useFrame((state, delta) => {
     x.current += 0.002;
     y.current = Math.sin(Math.PI * x.current - Math.PI / 2) / 2 + 0.5;
-    // console.log(y.current);
     if (x.current < 1) {
       const pos = geometry.parameters.path.getPointAt(y.current);
       state.camera.position.copy(pos);

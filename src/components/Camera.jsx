@@ -4,109 +4,109 @@ import { useEffect, useRef, useState } from 'react';
 import { Vector3 } from 'three';
 import { useActivePlanet } from '../hooks/useActivePlanet';
 import { useCurve } from '../hooks/useCurve';
+import { useCustomCamera } from '../hooks/useCustomCamera';
+import { calculatePosition } from '../utils/utils';
 
-export default function Camera({ pos = new Vector3() }) {
+export default function Camera() {
   const { camera } = useThree();
-  const { activePlanet } = useActivePlanet();
+  const { activePlanet, observeMode } = useActivePlanet();
+  const { cameraPosition, setCameraPosition, cameraLookAt, setCameraLookAt } =
+    useCustomCamera();
   const useMin = useRef(0);
   const refControls = useRef();
   const refTarget = useRef(new Vector3(0, 0, 0));
-  const [orbitTarget, setOrbitTarget] = useState([0, 0, 0]);
+  const [orbitTarget, setOrbitTarget] = useState(new Vector3(0, 0, 0));
   const { setCurveProps } = useCurve();
   const timer = useRef(0);
 
   useEffect(() => {
     timer.current = 0;
     if (activePlanet) {
-      const hypotenuse = Math.sqrt(
-        Math.pow(activePlanet.position.x, 2) +
-          Math.pow(activePlanet.position.z, 2)
+      let endPos = calculatePosition(
+        activePlanet.angle,
+        activePlanet.orbitRadius - activePlanet.geometry.parameters.radius * 3,
+        activePlanet.position.y
       );
-
-      let angle;
-      let endPos;
-
-      if (hypotenuse === 0) {
-        endPos = new Vector3(
-          activePlanet.position.x,
-          activePlanet.position.y,
-          activePlanet.position.z +
-            activePlanet.geometry.parameters.radius * 2.5
-        );
-      } else {
-        if (activePlanet.position.x > 0 && activePlanet.position.z > 0) {
-          angle =
-            Math.asin(activePlanet.position.z / hypotenuse) * (180 / Math.PI);
-        }
-
-        if (activePlanet.position.x < 0 && activePlanet.position.z > 0) {
-          angle =
-            180 -
-            Math.asin(Math.abs(activePlanet.position.z) / hypotenuse) *
-              (180 / Math.PI);
-        }
-
-        if (activePlanet.position.x < 0 && activePlanet.position.z < 0) {
-          angle =
-            180 +
-            Math.asin(Math.abs(activePlanet.position.z) / hypotenuse) *
-              (180 / Math.PI);
-        }
-
-        if (activePlanet.position.x > 0 && activePlanet.position.z < 0) {
-          angle =
-            360 -
-            Math.asin(Math.abs(activePlanet.position.z) / hypotenuse) *
-              (180 / Math.PI);
-        }
-
-        const newRadius =
-          hypotenuse - activePlanet.geometry.parameters.radius * 3;
-
-        endPos = new Vector3(
-          newRadius * Math.cos(angle * (Math.PI / 180)),
-          activePlanet.position.y,
-          newRadius * Math.sin(angle * (Math.PI / 180))
-        );
-      }
 
       const curve = {
         startPos: camera.position,
-        endPos: endPos,
+        endPos: new Vector3(...endPos),
       };
 
-      useMin.current = activePlanet.geometry.parameters.radius + 1;
+      if (!observeMode) {
+        setCameraLookAt(
+          new Vector3(
+            activePlanet.orbitRadius *
+              Math.cos(
+                (activePlanet.angle -
+                  (9 + activePlanet.geometry.parameters.radius / 2) *
+                    (10 / activePlanet.orbitRadius)) *
+                  (Math.PI / 180)
+              ),
+            activePlanet.position.y,
+            activePlanet.orbitRadius *
+              Math.sin(
+                (activePlanet.angle -
+                  (9 + activePlanet.geometry.parameters.radius / 2) *
+                    (10 / activePlanet.orbitRadius)) *
+                  (Math.PI / 180)
+              )
+          )
+        );
+        setOrbitTarget(
+          new Vector3(
+            activePlanet.orbitRadius *
+              Math.cos(
+                (activePlanet.angle -
+                  (9 + activePlanet.geometry.parameters.radius / 2) *
+                    (10 / activePlanet.orbitRadius)) *
+                  (Math.PI / 180)
+              ),
+            activePlanet.position.y,
+            activePlanet.orbitRadius *
+              Math.sin(
+                (activePlanet.angle -
+                  (9 + activePlanet.geometry.parameters.radius / 2) *
+                    (10 / activePlanet.orbitRadius)) *
+                  (Math.PI / 180)
+              )
+          )
+        );
+      } else {
+        setCameraLookAt(
+          new Vector3(
+            activePlanet.position.x,
+            activePlanet.position.y,
+            activePlanet.position.z
+          )
+        );
+        setOrbitTarget(
+          new Vector3(
+            activePlanet.position.x,
+            activePlanet.position.y,
+            activePlanet.position.z
+          )
+        );
+      }
+
+      console.log(activePlanet.orbitRadius);
+
+      useMin.current = activePlanet.planetRadius + 1;
       setCurveProps(curve);
-      setOrbitTarget([
-        activePlanet.position.x,
-        activePlanet.position.y,
-        activePlanet.position.z,
-      ]);
     } else {
+      setCameraLookAt(new Vector3(0, 0, 0));
+      setCurveProps({
+        startPos: camera.position,
+        endPos: new Vector3(0, 250, 0),
+      });
       useMin.current = 0;
       setOrbitTarget([0, 0, 0]);
     }
-  }, [activePlanet]);
+  }, [activePlanet, observeMode]);
 
   useFrame((state, delta) => {
-    if (activePlanet && timer.current < 5) {
-      //   const cameraPos = pos.set(
-      //     activePlanet.position.x,
-      //     activePlanet.position.y,
-      //     activePlanet.position.z + activePlanet.geometry.parameters.radius + 5
-      //   );
-      refTarget.current.lerp(activePlanet.position, delta);
-      refControls.current.target = refTarget.current.applyQuaternion(
-        activePlanet.quaternion
-      );
-      //   camera.position.lerp(cameraPos, delta);
-      //   camera.quaternion.slerpQuaternions(
-      //     camera.quaternion,
-      //     activePlanet.quaternion,
-      //     delta
-      //   );
-      //   timer.current += delta;
-    }
+    refTarget.current.lerp(cameraLookAt, delta);
+    refControls.current.target = refTarget.current;
   });
 
   return (

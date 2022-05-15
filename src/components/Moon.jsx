@@ -4,8 +4,10 @@ import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useActivePlanet } from '../hooks/useActivePlanet';
 import { usePlanets } from '../hooks/usePlanets';
 import MoonTexture from '../textures/Moon.jpg';
+import { calculatePosition } from '../utils/utils';
 
-export default function Moon({ planetRadius, radius, angle }) {
+export default function Moon(props) {
+  const { planetRadius, orbitRadius, angle } = props;
   const colorMap = useLoader(TextureLoader, MoonTexture);
   const moonRef = useRef();
   const { setPlanets } = usePlanets();
@@ -15,18 +17,20 @@ export default function Moon({ planetRadius, radius, angle }) {
     setActivePlanet(moonRef.current);
   };
 
-  const pos = [
-    radius * Math.cos(angle * (Math.PI / 180)),
-    3,
-    radius * Math.sin(angle * (Math.PI / 180)),
-  ];
+  const pos = calculatePosition(angle, orbitRadius, 3);
 
   useEffect(() => {
     setPlanets(moonRef.current);
   }, []);
 
   return (
-    <mesh name="Moon" position={pos} ref={moonRef} onClick={handleMoonClick}>
+    <mesh
+      {...props}
+      name="Moon"
+      position={pos}
+      ref={moonRef}
+      onClick={handleMoonClick}
+    >
       <sphereGeometry args={[planetRadius, 64, 64]} />
       <meshPhongMaterial map={colorMap} />
     </mesh>

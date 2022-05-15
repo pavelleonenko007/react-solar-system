@@ -4,9 +4,11 @@ import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useActivePlanet } from '../hooks/useActivePlanet';
 import { usePlanets } from '../hooks/usePlanets';
 import VenusTexture from '../textures/Venus.jpg';
+import { calculatePosition } from '../utils/utils';
 import Ecliptic from './Ecliptic';
 
-export default function Venus({ planetRadius, radius, angle }) {
+export default function Venus(props) {
+  const { planetRadius, orbitRadius, angle } = props;
   const ref = useRef();
   const { setPlanets } = usePlanets();
   const colorMap = useLoader(TextureLoader, VenusTexture);
@@ -15,22 +17,25 @@ export default function Venus({ planetRadius, radius, angle }) {
     event.stopPropagation();
     setActivePlanet(ref.current);
   };
-  const pos = [
-    radius * Math.cos(angle * (Math.PI / 180)),
-    0,
-    radius * Math.sin(angle * (Math.PI / 180)),
-  ];
+  const pos = calculatePosition(angle, orbitRadius);
 
   useEffect(() => {
     setPlanets(ref.current);
   }, []);
+
   return (
     <>
-      <mesh ref={ref} name="Venus" position={pos} onClick={handleVenusClick}>
+      <mesh
+        {...props}
+        ref={ref}
+        name="Venus"
+        position={pos}
+        onClick={handleVenusClick}
+      >
         <sphereGeometry args={[planetRadius, 32, 32]} />
         <meshPhongMaterial map={colorMap} />
       </mesh>
-      <Ecliptic xRadius={radius} zRadius={radius} />
+      <Ecliptic xRadius={orbitRadius} zRadius={orbitRadius} />
     </>
   );
 }

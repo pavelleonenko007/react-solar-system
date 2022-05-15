@@ -7,9 +7,11 @@ import { usePlanets } from '../hooks/usePlanets';
 import EarthCloudsTexture from '../textures/Earth_Clouds.png';
 import EarthDayTexture from '../textures/Earth_Day.jpg';
 import EarthNigthTexture from '../textures/Earth_Night.jpg';
+import { calculatePosition } from '../utils/utils';
 import Ecliptic from './Ecliptic';
 
-export default function Earth({ planetRadius, radius, angle }) {
+export default function Earth(props) {
+  const { planetRadius, orbitRadius, angle } = props;
   const [colorMap, nightMap, cloudsMap] = useLoader(TextureLoader, [
     EarthDayTexture,
     EarthNigthTexture,
@@ -24,11 +26,7 @@ export default function Earth({ planetRadius, radius, angle }) {
     setActivePlanet(planetRef.current);
   };
 
-  const pos = [
-    radius * Math.cos(angle * (Math.PI / 180)),
-    0,
-    radius * Math.sin(angle * (Math.PI / 180)),
-  ];
+  const pos = calculatePosition(angle, orbitRadius);
 
   useEffect(() => {
     setPlanets(planetRef.current);
@@ -113,7 +111,13 @@ export default function Earth({ planetRadius, radius, angle }) {
         <sphereGeometry args={[planetRadius + 0.015, 64, 64]} />
         <meshPhongMaterial map={cloudsMap} transparent />
       </mesh>
-      <mesh position={pos} name="Earth" ref={planetRef} onClick={handleClick}>
+      <mesh
+        {...props}
+        position={pos}
+        name="Earth"
+        ref={planetRef}
+        onClick={handleClick}
+      >
         <sphereGeometry args={[planetRadius, 100, 100]} />
         <shaderMaterial
           args={[
@@ -177,22 +181,8 @@ export default function Earth({ planetRadius, radius, angle }) {
             },
           ]}
         />
-        {/* <earthShaderMaterial
-          ref={mat}
-          uDay={colorMap}
-          uNight={nightMap}
-          extensions={{ derivatives: true }}
-        /> */}
-        {/* <meshPhongMaterial
-          reflectivity={2}
-          map={nightMap}
-          normalMap={normalMap}
-          normalScale={[0.2, 0.2]}
-          bumpMap={bumpMap}
-          bumpScale={0.9}
-        /> */}
       </mesh>
-      <Ecliptic xRadius={radius} zRadius={radius} />
+      <Ecliptic xRadius={orbitRadius} zRadius={orbitRadius} />
     </group>
   );
 }

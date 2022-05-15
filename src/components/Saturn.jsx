@@ -6,9 +6,11 @@ import { useActivePlanet } from '../hooks/useActivePlanet';
 import { usePlanets } from '../hooks/usePlanets';
 import SaturnTexture from '../textures/Saturn.jpg';
 import Rings from '../textures/saturn_rings.png';
+import { calculatePosition } from '../utils/utils';
 import Ecliptic from './Ecliptic';
 
-export default function Saturn({ planetRadius, radius, angle }) {
+export default function Saturn(props) {
+  const { planetRadius, orbitRadius, angle } = props;
   const [colorMap, ringsMap] = useLoader(TextureLoader, [SaturnTexture, Rings]);
   const ref = useRef();
   const ringRef = useRef();
@@ -19,11 +21,7 @@ export default function Saturn({ planetRadius, radius, angle }) {
     event.stopPropagation();
     setActivePlanet(ref.current);
   };
-  const pos = [
-    radius * Math.cos(angle * (Math.PI / 180)),
-    0,
-    radius * Math.sin(angle * (Math.PI / 180)),
-  ];
+  const pos = calculatePosition(angle, orbitRadius);
 
   useEffect(() => {
     const geometry = ringGeoRef.current;
@@ -42,6 +40,7 @@ export default function Saturn({ planetRadius, radius, angle }) {
   return (
     <group>
       <mesh
+        {...props}
         ref={ref}
         name="Saturn"
         position={pos}
@@ -117,7 +116,7 @@ export default function Saturn({ planetRadius, radius, angle }) {
           shadowSide={BackSide}
         />
       </mesh>
-      <Ecliptic xRadius={radius} zRadius={radius} />
+      <Ecliptic xRadius={orbitRadius} zRadius={orbitRadius} />
     </group>
   );
 }

@@ -4,9 +4,11 @@ import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useActivePlanet } from '../hooks/useActivePlanet';
 import { usePlanets } from '../hooks/usePlanets';
 import MercuryMap from '../textures/Mercury.jpg';
+import { calculatePosition } from '../utils/utils';
 import Ecliptic from './Ecliptic';
 
-export default function Mercury({ planetRadius, radius, angle }) {
+export default function Mercury(props) {
+  const { planetRadius, orbitRadius, angle } = props;
   const colorMap = useLoader(TextureLoader, MercuryMap);
   const planetRef = useRef();
   const { setPlanets } = usePlanets();
@@ -16,11 +18,7 @@ export default function Mercury({ planetRadius, radius, angle }) {
     setActivePlanet(planetRef.current);
   };
 
-  const pos = [
-    radius * Math.cos(angle * (Math.PI / 180)),
-    0,
-    radius * Math.sin(angle * (Math.PI / 180)),
-  ];
+  const pos = calculatePosition(angle, orbitRadius);
 
   useEffect(() => {
     setPlanets(planetRef.current);
@@ -29,6 +27,7 @@ export default function Mercury({ planetRadius, radius, angle }) {
   return (
     <>
       <mesh
+        {...props}
         ref={planetRef}
         name="Mercury"
         position={pos}
@@ -38,7 +37,7 @@ export default function Mercury({ planetRadius, radius, angle }) {
         <sphereGeometry args={[planetRadius, 32, 32]} />
         <meshStandardMaterial map={colorMap} />
       </mesh>
-      <Ecliptic xRadius={radius} zRadius={radius} />
+      <Ecliptic xRadius={orbitRadius} zRadius={orbitRadius} />
     </>
   );
 }
