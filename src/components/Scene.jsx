@@ -29,7 +29,6 @@ softShadows({
 export default function Scene() {
   const { curveProps } = useCurve();
   const { planets, removePlanet } = usePlanets();
-  console.log(planets);
 
   useEffect(() => {
     return () => {
