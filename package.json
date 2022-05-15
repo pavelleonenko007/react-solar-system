@@ -1,6 +1,7 @@
 {
   "name": "react-solar-system",
   "version": "0.1.0",
+  "homepage": "https://pavelleonenko007.github.io/react-solar-system/",
   "private": true,
   "dependencies": {
     "@react-three/drei": "^9.8.1",
