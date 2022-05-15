@@ -1,0 +1,239 @@
+[
+  {
+    "id": "Sun",
+    "name": "Sun",
+    "description": "<p>The Sun is a yellow dwarf star, a hot ball of glowing gases at the heart of our solar system. Its gravity holds everything from the biggest planets to tiny debris in its orbit. It is by far the most important source of energy for life on Earth.</p>",
+    "bullets": [
+      {
+        "title": "Star type",
+        "value": "Yellow Dwarf Star"
+      },
+      {
+        "title": "Age",
+        "value": "4,603 billion y.o."
+      }
+    ]
+  },
+  {
+    "id": "Mercury",
+    "name": "Mercury",
+    "description": "<p>Mercury is the smallest planet in the Solar System and the closest to the Sun. Although the daylight temperature at the surface of Mercury is generally extremely high, observations strongly suggest that ice (frozen water) exists on Mercury.</p>",
+    "bullets": [
+      {
+        "title": "Planet Type",
+        "value": "Terrestrial"
+      },
+      {
+        "title": "Age",
+        "value": "4,503 billion y.o."
+      },
+      {
+        "title": "Distance From Sun",
+        "value": "0.4 AU"
+      },
+      {
+        "title": "Moons",
+        "value": 0
+      }
+    ]
+  },
+  {
+    "id": "Venus",
+    "name": "Venus",
+    "description": "<p>Venus has the densest atmosphere of the four terrestrial planets, consisting of more than 96% carbon dioxide. A thick atmosphere traps heat in a runaway greenhouse effect, making it the hottest planet in our solar system.</p>",
+    "bullets": [
+      {
+        "title": "Planet Type",
+        "value": "Terrestrial"
+      },
+      {
+        "title": "Age",
+        "value": "4,503 billion y.o."
+      },
+      {
+        "title": "Distance From Sun",
+        "value": "0.7 AU"
+      },
+      {
+        "title": "Moons",
+        "value": 0
+      }
+    ]
+  },
+  {
+    "id": "Earth",
+    "name": "Earth",
+    "description": "<p>Earth – our home and the only astronomical object known to harbor life. About 71% of Earth&#39;s surface is made up of the ocean, dwarfing Earth&#39;s polar ice, lakes, and rivers. The remaining 29% of Earth&#39;s surface is land, consisting of continents and islands.</p>",
+    "bullets": [
+      {
+        "title": "Planet Type",
+        "value": "Terrestrial"
+      },
+      {
+        "title": "Age",
+        "value": "4,543 billion y.o."
+      },
+      {
+        "title": "Distance From Sun",
+        "value": "1 AU"
+      },
+      {
+        "title": "Moons",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "Moon",
+    "name": "Moon",
+    "description": "<p>The Moon is Earth&#39;s only natural satellite and the only place beyond Earth where humans have set foot. The Moon&#39;s presence helps stabilize our planet&#39;s wobble and moderate our climate. Moon has a very thin atmosphere called an exosphere.</p>",
+    "bullets": [
+      {
+        "title": "Satellite type ",
+        "value": "Terrestrial"
+      },
+      {
+        "title": "Age",
+        "value": "4,425 billion y.o."
+      }
+    ]
+  },
+  {
+    "id": "Mars",
+    "name": "Mars",
+    "description": "<p>Mars is a dusty, cold, desert world with a very thin atmosphere. There is strong evidence Mars was—billions of years ago—wetter and warmer, with a thicker atmosphere.</p>",
+    "bullets": [
+      {
+        "title": "Planet Type",
+        "value": "Terrestrial"
+      },
+      {
+        "title": "Age",
+        "value": "4,603 billion y.o."
+      },
+      {
+        "title": "Distance From Sun",
+        "value": "1.5 AU"
+      },
+      {
+        "title": "Moons",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "Jupiter",
+    "name": "Jupiter",
+    "description": "<p>Jupiter is more than twice as massive than the other planets of our solar system combined. Jupiter is so big that all the other planets in the solar system could fit inside it. More than 1,300<br> Earths would fit inside Jupiter.</p>",
+    "bullets": [
+      {
+        "title": "Planet Type",
+        "value": "Gas Giant"
+      },
+      {
+        "title": "Age",
+        "value": "4,603 billion y.o."
+      },
+      {
+        "title": "Distance From Sun",
+        "value": "5.2 AU"
+      },
+      {
+        "title": "Moons",
+        "value": 79
+      }
+    ]
+  },
+  {
+    "id": "Saturn",
+    "name": "Saturn",
+    "description": "<p>Saturn is the second-largest planet in the Solar System, after Jupiter. Adorned with a dazzling, complex system of icy spectacular rings, Saturn is unique in our solar system.</p>",
+    "bullets": [
+      {
+        "title": "Planet Type",
+        "value": "Gas Giant"
+      },
+      {
+        "title": "Age",
+        "value": "4,503 billion y.o."
+      },
+      {
+        "title": "Distance From Sun",
+        "value": "9.5 AU"
+      },
+      {
+        "title": "Moons",
+        "value": 27
+      }
+    ]
+  },
+  {
+    "id": "Uranus",
+    "name": "Uranus",
+    "description": "<p>Uranus rotates at a nearly 90-degree angle from the plane of its orbit. This unique tilt makes Uranus appear to spin on its side. Like the other giant planets, Uranus has a ring system it is also the coldest planet in the Solar System</p>",
+    "bullets": [
+      {
+        "title": "Planet Type",
+        "value": "Ice Giant"
+      },
+      {
+        "title": "Age",
+        "value": "4,503 billion y.o."
+      },
+      {
+        "title": "Distance From Sun",
+        "value": "19.8 AU"
+      },
+      {
+        "title": "Moons",
+        "value": 62
+      }
+    ]
+  },
+  {
+    "id": "Neptune",
+    "name": "Neptune",
+    "description": "<p>Neptune is the farthest-known planet<br> weather is characterised by extremely dynamic storm systems, with winds nearly reaching supersonic flow. The first planet found by mathematical prediction rather than by telescope.</p>",
+    "bullets": [
+      {
+        "title": "Planet Type",
+        "value": "Ice Giant"
+      },
+      {
+        "title": "Age",
+        "value": "4,503 billion y.o."
+      },
+      {
+        "title": "Distance From Sun",
+        "value": "30.1 AU"
+      },
+      {
+        "title": "Moons",
+        "value": 14
+      }
+    ]
+  },
+  {
+    "id": "Pluto",
+    "name": "Pluto",
+    "description": "<p>Pluto, once considered the ninth and most distant planet from the sun, is now the largest known dwarf planet in the solar system. It’s very small but complex world of ice mountains and frozen plains.</p>",
+    "bullets": [
+      {
+        "title": "Planet Type",
+        "value": "Dwarf Planet"
+      },
+      {
+        "title": "Age",
+        "value": "4,503 billion y.o."
+      },
+      {
+        "title": "Distance From Sun",
+        "value": "39,5 AU"
+      },
+      {
+        "title": "Moons",
+        "value": 5
+      }
+    ]
+  }
+]
