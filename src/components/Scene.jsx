@@ -1,4 +1,4 @@
-import { Loader, softShadows, Stars, Stats } from '@react-three/drei';
+import { Loader, Stars, Stats } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import React, { Suspense, useEffect } from 'react';
 import { useCurve } from '../hooks/useCurve';
@@ -18,17 +18,9 @@ import Sun from './Sun';
 import Uranus from './Uranus';
 import Venus from './Venus';
 
-softShadows({
-  frustum: 3.75,
-  size: 0.007,
-  near: 9.5,
-  samples: 17,
-  rings: 11, // Rings (default: 11) must be a int
-});
-
 export default function Scene() {
   const { curveProps } = useCurve();
-  const { planets, removePlanet } = usePlanets();
+  const { removePlanet } = usePlanets();
 
   useEffect(() => {
     return () => {
